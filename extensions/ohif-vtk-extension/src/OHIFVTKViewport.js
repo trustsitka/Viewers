@@ -39,14 +39,14 @@ class OHIFVTKViewport extends Component {
     children: PropTypes.node
   };
 
-  static id = 'OHIFCornerstoneViewport';
+  static id = 'OHIFVTKViewport';
 
   static init() {
-    console.log('OHIFCornerstoneViewport init()');
+    console.log('OHIFVTKViewport init()');
   }
 
   static destroy() {
-    console.log('OHIFCornerstoneViewport destroy()');
+    console.log('OHIFVTKViewport destroy()');
     StackManager.clearStacks();
   }
 
@@ -138,9 +138,13 @@ class OHIFVTKViewport extends Component {
 
       switch (sopClassUid) {
         case SOP_CLASSES.SEGMENTATION_STORAGE:
-          throw new Error("Not yet implemented");
+          throw new Error('Not yet implemented');
 
-          const data = handleSegmentationStorage(stack.imageIds, displaySetInstanceUid, cornerstone);
+          const data = handleSegmentationStorage(
+            stack.imageIds,
+            displaySetInstanceUid,
+            cornerstone
+          );
           imageDataObject = data.referenceDataObject;
           labelmapDataObject = data.labelmapDataObject;
 
@@ -151,24 +155,24 @@ class OHIFVTKViewport extends Component {
             });
           };
 
-          callbacks = [
-            doneLoadingCallback
-          ];
+          callbacks = [doneLoadingCallback];
 
           loadImageData(imageDataObject, callbacks, cornerstone);
 
           break;
         default:
-          imageDataObject = getImageData(stack.imageIds, displaySetInstanceUid, cornerstone);
+          imageDataObject = getImageData(
+            stack.imageIds,
+            displaySetInstanceUid,
+            cornerstone
+          );
           doneLoadingCallback = () => {
             resolve({
-              data: imageDataObject.vtkImageData,
+              data: imageDataObject.vtkImageData
             });
           };
 
-          callbacks = [
-            doneLoadingCallback
-          ];
+          callbacks = [doneLoadingCallback];
 
           loadImageData(imageDataObject, callbacks, cornerstone);
 
@@ -202,7 +206,7 @@ class OHIFVTKViewport extends Component {
       sopClassUid,
       sopInstanceUid,
       frameIndex
-    ).then(({ data, labelmap })=> {
+    ).then(({ data, labelmap }) => {
       this.setState({
         viewportData: data,
         labelmap
@@ -251,9 +255,11 @@ class OHIFVTKViewport extends Component {
             labelmap={this.state.labelmap}
             viewportIndex={this.props.viewportIndex}
           />
-        ) : <div style={style}>
-          <LoadingIndicator/>
-        </div>}
+        ) : (
+          <div style={style}>
+            <LoadingIndicator />
+          </div>
+        )}
         {childrenWithProps}
       </>
     );

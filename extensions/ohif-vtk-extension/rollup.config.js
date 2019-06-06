@@ -20,11 +20,9 @@ const globals = {
   'cornerstone-core': 'cornerstone',
   'cornerstone-wado-image-loader': 'cornerstoneWADOImageLoader',
   'cornerstone-math': 'cornerstoneMath',
-  'cornerstone-tools': 'cornerstoneTools',
   dcmjs: 'dcmjs',
   'dicom-parser': 'dicomParser',
   'ohif-core': 'OHIF',
-  hammerjs: 'Hammer'
 };
 
 export default {
