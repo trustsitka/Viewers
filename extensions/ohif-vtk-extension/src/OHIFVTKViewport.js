@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import OHIF from 'ohif-core';
-import ConnectedVTKViewport from './ConnectedVTKViewport';
 import cornerstone from 'cornerstone-core';
-import handleSegmentationStorage from './handleSegmentationStorage.js';
 import { getImageData, loadImageData } from 'react-vtkjs-viewport';
+import vtkVolume from 'vtk.js/Sources/Rendering/Core/Volume';
+import vtkVolumeMapper from 'vtk.js/Sources/Rendering/Core/VolumeMapper';
+import ConnectedVTKViewport from './ConnectedVTKViewport';
+import handleSegmentationStorage from './handleSegmentationStorage.js';
 import LoadingIndicator from './LoadingIndicator.js';
 
 const { StackManager } = OHIF.utils;
@@ -29,7 +31,9 @@ specialCaseHandlers[
 
 class OHIFVTKViewport extends Component {
   state = {
-    viewportData: null
+    volumes: null,
+    paintFilterLabelMapImageData: null,
+    paintFilterBackgroundImageData: null
   };
 
   static propTypes = {
@@ -97,7 +101,7 @@ class OHIFVTKViewport extends Component {
     return stack;
   }
 
-  static getViewportData = (
+  static getStack = (
     studies,
     studyInstanceUid,
     displaySetInstanceUid,
@@ -121,67 +125,48 @@ class OHIFVTKViewport extends Component {
     sopInstanceUid,
     frameIndex
   ) => {
-    return new Promise((resolve, reject) => {
-      const stack = OHIFVTKViewport.getViewportData(
-        studies,
-        studyInstanceUid,
-        displaySetInstanceUid,
-        sopClassUid,
-        sopInstanceUid,
-        frameIndex
-      );
+    const stack = OHIFVTKViewport.getStack(
+      studies,
+      studyInstanceUid,
+      displaySetInstanceUid,
+      sopClassUid,
+      sopInstanceUid,
+      frameIndex
+    );
 
-      let imageDataObject;
-      let labelmapDataObject;
-      let doneLoadingCallback;
-      let callbacks;
+    let imageDataObject;
+    let labelmapDataObject;
 
-      switch (sopClassUid) {
-        case SOP_CLASSES.SEGMENTATION_STORAGE:
-          throw new Error('Not yet implemented');
+    switch (sopClassUid) {
+      case SOP_CLASSES.SEGMENTATION_STORAGE:
+        throw new Error('Not yet implemented');
 
-          const data = handleSegmentationStorage(
-            stack.imageIds,
-            displaySetInstanceUid,
-            cornerstone
-          );
-          imageDataObject = data.referenceDataObject;
-          labelmapDataObject = data.labelmapDataObject;
+        const data = handleSegmentationStorage(
+          stack.imageIds,
+          displaySetInstanceUid
+        );
 
-          doneLoadingCallback = () => {
-            resolve({
-              data: imageDataObject.vtkImageData,
-              labelmap: labelmapDataObject
-            });
+        imageDataObject = data.referenceDataObject;
+        labelmapDataObject = data.labelmapDataObject;
+
+        return loadImageData(imageDataObject).then(() => {
+          return {
+            data: imageDataObject.vtkImageData,
+            labelmap: labelmapDataObject
           };
+        });
+      default:
+        imageDataObject = getImageData(stack.imageIds, displaySetInstanceUid);
 
-          callbacks = [doneLoadingCallback];
-
-          loadImageData(imageDataObject, callbacks, cornerstone);
-
-          break;
-        default:
-          imageDataObject = getImageData(
-            stack.imageIds,
-            displaySetInstanceUid,
-            cornerstone
-          );
-          doneLoadingCallback = () => {
-            resolve({
-              data: imageDataObject.vtkImageData
-            });
+        return loadImageData(imageDataObject).then(() => {
+          return {
+            data: imageDataObject.vtkImageData
           };
-
-          callbacks = [doneLoadingCallback];
-
-          loadImageData(imageDataObject, callbacks, cornerstone);
-
-          break;
-      }
-    });
+        });
+    }
   };
 
-  setStateFromProps() {
+  async setStateFromProps() {
     const { studies, displaySet } = this.props.viewportData;
     const {
       studyInstanceUid,
@@ -199,18 +184,25 @@ class OHIFVTKViewport extends Component {
 
     const sopClassUid = sopClassUids[0];
 
-    this.getViewportData(
+    const { data, labelmap } = await this.getViewportData(
       studies,
       studyInstanceUid,
       displaySetInstanceUid,
       sopClassUid,
       sopInstanceUid,
       frameIndex
-    ).then(({ data, labelmap }) => {
-      this.setState({
-        viewportData: data,
-        labelmap
-      });
+    );
+
+    const volumeActor = vtkVolume.newInstance();
+    const volumeMapper = vtkVolumeMapper.newInstance();
+
+    volumeActor.setMapper(volumeMapper);
+    volumeMapper.setInputData(data);
+
+    this.setState({
+      volumes: [volumeActor],
+      paintFilterLabelMapImageData: labelmap,
+      paintFilterBackgroundImageData: data
     });
   }
 
@@ -249,10 +241,15 @@ class OHIFVTKViewport extends Component {
 
     return (
       <>
-        {this.state.viewportData ? (
+        {this.state.volumes ? (
           <ConnectedVTKViewport
-            data={this.state.viewportData}
-            labelmap={this.state.labelmap}
+            volumes={this.state.volumes}
+            paintFilterLabelMapImageData={
+              this.state.paintFilterLabelMapImageData
+            }
+            paintFilterBackgroundImageData={
+              this.state.paintFilterBackgroundImageData
+            }
             viewportIndex={this.props.viewportIndex}
           />
         ) : (

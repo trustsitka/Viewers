@@ -63,7 +63,7 @@ module.exports = {
   entry,
   output: {
     path: outputPath,
-    filename: 'index.js',
+    filename: 'index.umd.js',
     library: '@ohif/extension-vtk',
     libraryTarget: 'umd',
     globalObject: 'this',
@@ -97,6 +97,12 @@ module.exports = {
     'ohif-core',
     'dcmjs',
     'react-viewerbase',
-    /*/\b(vtk.js)/*/
+    'react',//: 'React',
+    'react-dom',//: 'ReactDOM',
+    'react-redux',//: 'ReactRedux',
+    'react-resize-detector',//: 'ReactResizeDetector',
+    'react-viewerbase',//: 'reactViewerbase',
+    'prop-types'//: 'PropTypes'
+/*/\b(vtk.js)/*/
   ],
 }

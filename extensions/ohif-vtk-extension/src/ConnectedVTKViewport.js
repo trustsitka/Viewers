@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
-import { VTKMPRViewport } from 'react-vtkjs-viewport';
+import { View2D } from 'react-vtkjs-viewport';
 import OHIF from 'ohif-core';
+
+console.warn(View2D);
 
 const {
   setViewportActive,
@@ -31,7 +33,7 @@ const mapStateToProps = (state, ownProps) => {
     ...pluginDetails,
     activeTool: activeButton && activeButton.command,
     ...dataFromStore,
-    enableStackPrefetch: isActive,
+    enableStackPrefetch: isActive
   };
 };
 
@@ -54,8 +56,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 const ConnectedVTKViewport = connect(
-  mapStateToProps,
+  mapStateToProps
   //mapDispatchToProps
-)(VTKMPRViewport);
+)(View2D);
 
 export default ConnectedVTKViewport;
