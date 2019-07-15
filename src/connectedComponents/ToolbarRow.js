@@ -10,7 +10,7 @@ import { commandsManager, extensionManager } from './../App.js';
 
 import ConnectedCineDialog from './ConnectedCineDialog';
 import ConnectedLayoutButton from './ConnectedLayoutButton';
-import ConnectedPluginSwitch from './ConnectedPluginSwitch.js';
+// import ConnectedPluginSwitch from './ConnectedPluginSwitch.js';
 import { MODULE_TYPES } from 'ohif-core';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
@@ -128,7 +128,7 @@ class ToolbarRow extends Component {
           </div>
           {buttonComponents}
           <ConnectedLayoutButton />
-          <ConnectedPluginSwitch />
+          {/* <ConnectedPluginSwitch /> */}
           <div
             className="pull-right m-t-1 rm-x-1"
             style={{ marginLeft: 'auto' }}

@@ -142,6 +142,24 @@ function getResetLabellingAndContextMenu(store) {
 export default function setupTools(store) {
   const toolLabellingFlowCallback = getToolLabellingFlowCallback(store);
   const availableTools = [
+    {
+      name: 'ArrowAnnotate',
+      mouseButtonMasks: [1],
+      props: {
+        configuration: {
+          getMeasurementLocationCallback: toolLabellingFlowCallback,
+        },
+      },
+    },
+    {
+      name: 'Eraser',
+      mouseButtonMasks: [1],
+      props: {
+        configuration: {
+          getMeasurementLocationCallback: toolLabellingFlowCallback,
+        },
+      },
+    },
     { name: 'Pan', mouseButtonMasks: [1, 4] },
     { name: 'Zoom', mouseButtonMasks: [1, 2] },
     { name: 'Wwwc', mouseButtonMasks: [1] },
