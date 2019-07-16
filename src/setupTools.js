@@ -154,11 +154,6 @@ export default function setupTools(store) {
     {
       name: 'Eraser',
       mouseButtonMasks: [1],
-      props: {
-        configuration: {
-          getMeasurementLocationCallback: toolLabellingFlowCallback,
-        },
-      },
     },
     { name: 'Pan', mouseButtonMasks: [1, 4] },
     { name: 'Zoom', mouseButtonMasks: [1, 2] },
