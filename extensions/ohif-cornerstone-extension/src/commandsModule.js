@@ -99,7 +99,7 @@ const actions = {
         const { data } = toolState;
 
         data
-          .filter(({ _id }) => _id)
+          .filter(({ _id }) => !!_id)
           .forEach(data => _removeMeasurementData(toolType, data));
       });
   },
@@ -112,7 +112,7 @@ const actions = {
         const { data } = toolState;
 
         data
-          .filter(({ _id, active }) => _id && active)
+          .filter(({ _id, active }) => !!_id && !!active)
           .forEach(data => _removeMeasurementData(toolType, data));
       });
   },
@@ -225,7 +225,7 @@ function _getElementToolState(element) {
   const { toolState } = cornerstoneTools.globalImageIdSpecificToolStateManager;
   const { imageId } = element.image;
 
-  if (toolState && toolState.hasOwnProperty(imageId)) {
+  if (toolState && Object.prototype.hasOwnProperty.call(toolState, imageId)) {
     return toolState[imageId];
   }
 
