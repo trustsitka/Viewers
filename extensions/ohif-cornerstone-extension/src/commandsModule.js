@@ -94,27 +94,35 @@ const actions = {
     const enabledElement = _getEnabledElement(viewports);
     const enabledElementToolState = _getElementToolState(enabledElement);
 
-    Object.entries(enabledElementToolState)
-      .forEach(([toolType, toolState]) => {
-        const { data } = toolState;
+    if (enabledElementToolState) {
+      Object.entries(enabledElementToolState).forEach(
+        ([toolType, toolState]) => {
+          const { data } = toolState;
 
-        data
-          .filter(({ _id }) => !!_id)
-          .forEach(data => _removeMeasurementData(toolType, data));
-      });
+          data
+            .filter(({ _id }) => !!_id)
+            .forEach(data => _removeMeasurementData(toolType, data));
+        }
+      );
+    }
   },
   cancelActiveDraw: ({ viewports }) => {
     const enabledElement = _getEnabledElement(viewports);
     const enabledElementToolState = _getElementToolState(enabledElement);
 
-    Object.entries(enabledElementToolState)
-      .forEach(([toolType, toolState]) => {
-        const { data } = toolState;
+    if (enabledElementToolState) {
+      Object.entries(enabledElementToolState).forEach(
+        ([toolType, toolState]) => {
+          const { data } = toolState;
 
-        data
-          .filter(({ _id, active }) => !!_id && !!active)
-          .forEach(data => _removeMeasurementData(toolType, data));
-      });
+          data
+            .filter(({ _id, active }) => !!_id && !!active)
+            .forEach(data => _removeMeasurementData(toolType, data));
+        }
+      );
+
+      cornerstoneTools.cancelDrawing();
+    }
   },
 };
 
@@ -192,7 +200,7 @@ const definitions = {
     commandFn: actions.cancelActiveDraw,
     storeContexts: ['viewports'],
     options: {},
-  }
+  },
 };
 
 /**
@@ -243,7 +251,7 @@ function _removeMeasurementData(toolType, data) {
         active,
         lesionNamingNumber,
         measurementNumber,
-      }
+      },
     },
   });
 }

@@ -70,5 +70,6 @@ window.config = {
     },
     // ~ Cornerstone Tools
     { commandName: 'setZoomTool', label: 'Zoom', keys: ['z'] },
+    { commandName: 'cancelActiveDraw', label: 'Cancel', keys: ['escape'] },
   ],
 };
