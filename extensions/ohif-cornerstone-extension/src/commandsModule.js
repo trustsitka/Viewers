@@ -91,59 +91,38 @@ const actions = {
     console.warn('updateDisplaySet: ', direction);
   },
   clearAnnotations: ({ viewports }) => {
-    const element = _getActiveViewportEnabledElement(
-      viewports.viewportSpecificData,
-      viewports.activeViewportIndex
-    );
-    if (!element) {
-      return;
-    }
+    const enabledElement = _getEnabledElement(viewports);
+    const enabledElementToolState = _getElementToolState(enabledElement);
 
-    const enabledElement = cornerstone.getEnabledElement(element);
-    if (!enabledElement || !enabledElement.image) {
-      return;
-    }
+    if (enabledElementToolState) {
+      Object.entries(enabledElementToolState).forEach(
+        ([toolType, toolState]) => {
+          const { data } = toolState;
 
-    const {
-      toolState,
-    } = cornerstoneTools.globalImageIdSpecificToolStateManager;
-    if (
-      !toolState ||
-      toolState.hasOwnProperty(enabledElement.image.imageId) === false
-    ) {
-      return;
-    }
-
-    const imageIdToolState = toolState[enabledElement.image.imageId];
-
-    const measurementsToRemove = [];
-
-    Object.keys(imageIdToolState).forEach(toolType => {
-      const { data } = imageIdToolState[toolType];
-
-      data.forEach(measurementData => {
-        const { _id, lesionNamingNumber, measurementNumber } = measurementData;
-        if (!_id) {
-          return;
+          data
+            .filter(({ _id }) => !!_id)
+            .forEach(data => _removeMeasurementData(toolType, data));
         }
+      );
+    }
+  },
+  cancelActiveDraw: ({ viewports }) => {
+    const enabledElement = _getEnabledElement(viewports);
+    const enabledElementToolState = _getElementToolState(enabledElement);
 
-        measurementsToRemove.push({
-          toolType,
-          _id,
-          lesionNamingNumber,
-          measurementNumber,
-        });
-      });
-    });
+    if (enabledElementToolState) {
+      Object.entries(enabledElementToolState).forEach(
+        ([toolType, toolState]) => {
+          const { data } = toolState;
 
-    measurementsToRemove.forEach(measurementData => {
-      OHIF.measurements.MeasurementHandlers.onRemoved({
-        detail: {
-          toolType: measurementData.toolType,
-          measurementData,
-        },
-      });
-    });
+          data
+            .filter(({ _id, active }) => !!_id && !!active)
+            .forEach(data => _removeMeasurementData(toolType, data));
+        }
+      );
+
+      cornerstoneTools.cancelDrawing();
+    }
   },
 };
 
@@ -217,6 +196,11 @@ const definitions = {
     storeContexts: [],
     options: {},
   },
+  cancelActiveDraw: {
+    commandFn: actions.cancelActiveDraw,
+    storeContexts: ['viewports'],
+    options: {},
+  },
 };
 
 /**
@@ -226,6 +210,50 @@ const definitions = {
 function _getActiveViewportEnabledElement(viewports, activeIndex) {
   const activeViewport = viewports[activeIndex] || {};
   return activeViewport.dom;
+}
+
+function _getEnabledElement(viewports, activeIndex) {
+  const element = _getActiveViewportEnabledElement(
+    viewports.viewportSpecificData,
+    viewports.activeViewportIndex
+  );
+  if (!element) {
+    return null;
+  }
+
+  const enabledElement = cornerstone.getEnabledElement(element);
+  if (!enabledElement || !enabledElement.image) {
+    return null;
+  }
+
+  return enabledElement;
+}
+
+function _getElementToolState(element) {
+  const { toolState } = cornerstoneTools.globalImageIdSpecificToolStateManager;
+  const { imageId } = element.image;
+
+  if (toolState && Object.prototype.hasOwnProperty.call(toolState, imageId)) {
+    return toolState[imageId];
+  }
+
+  return null;
+}
+
+function _removeMeasurementData(toolType, data) {
+  const { _id, active, lesionNamingNumber, measurementNumber } = data;
+
+  OHIF.measurements.MeasurementHandlers.onRemoved({
+    detail: {
+      toolType,
+      measurementData: {
+        _id,
+        active,
+        lesionNamingNumber,
+        measurementNumber,
+      },
+    },
+  });
 }
 
 export default {
