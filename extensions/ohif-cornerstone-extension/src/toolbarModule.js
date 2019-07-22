@@ -68,13 +68,22 @@ const definitions = [
         commandOptions: { toolName: 'ArrowAnnotate' },
       },
       {
-        id: 'FreehandRoi',
-        label: 'Freehand',
-        icon: 'liver',
+        id: 'EllipticalRoi',
+        label: 'Ellipse',
+        icon: 'circle-o',
         //
         type: TOOLBAR_BUTTON_TYPES.SET_TOOL_ACTIVE,
         commandName: 'setToolActive',
-        commandOptions: { toolName: 'FreehandMouse' },
+        commandOptions: { toolName: 'EllipticalRoi' },
+      },
+      {
+        id: 'RectangleRoi',
+        label: 'Rectangle',
+        icon: 'square-o',
+        //
+        type: TOOLBAR_BUTTON_TYPES.SET_TOOL_ACTIVE,
+        commandName: 'setToolActive',
+        commandOptions: { toolName: 'RectangleRoi' },
       },
       {
         id: 'Length',
