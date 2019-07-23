@@ -1,6 +1,7 @@
 import cornerstone from 'cornerstone-core';
 import cornerstoneTools from 'cornerstone-tools';
 import OHIF from 'ohif-core';
+const scroll = cornerstoneTools.import('util/scroll');
 
 const actions = {
   rotateViewport: ({ viewports, rotation }) => {
@@ -124,6 +125,22 @@ const actions = {
       cornerstoneTools.cancelDrawing();
     }
   },
+  nextImage: ({ viewports }) => {
+    const enabledElement = _getActiveViewportEnabledElement(
+      viewports.viewportSpecificData,
+      viewports.activeViewportIndex
+    );
+
+     scroll(enabledElement, 1);
+  },
+  previousImage: ({ viewports }) => {
+    const enabledElement = _getActiveViewportEnabledElement(
+      viewports.viewportSpecificData,
+      viewports.activeViewportIndex
+    );
+
+     scroll(enabledElement, -1);
+  },
 };
 
 const definitions = {
@@ -177,7 +194,16 @@ const definitions = {
     storeContexts: ['viewports'],
     options: {},
   },
-  // TODO: Next/Previous image
+  nextImage: {
+    commandFn: actions.nextImage,
+    storeContexts: ['viewports'],
+    options: {},
+  },
+  previousImage: {
+    commandFn: actions.previousImage,
+    storeContexts: ['viewports'],
+    options: {},
+  },
   // TODO: First/Last image
   // Next/Previous series/DisplaySet
   nextViewportDisplaySet: {
