@@ -54,6 +54,14 @@ const definitions = [
     commandOptions: { toolName: 'Zoom' },
   },
   {
+    id: 'PanZoomMouseWheel',
+    label: 'Pan / Zoom',
+    icon: 'arrows',
+    type: TOOLBAR_BUTTON_TYPES.SET_TOOL_ACTIVE,
+    commandName: 'setToolActive',
+    commandOptions: { toolName: 'PanZoomMouseWheel' },
+  },
+  {
     id: 'DrawTools',
     label: 'Draw',
     icon: 'measure-temp',
