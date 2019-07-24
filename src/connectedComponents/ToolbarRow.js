@@ -229,7 +229,11 @@ function _setActiveToolAsPassive() {
 function _handleToolbarButtonClick(button, evt, props) {
   if (button.commandName) {
     const options = Object.assign({ evt }, button.commandOptions);
-    _setActiveToolAsPassive.call(this);
+
+    if (button.type === 'setToolActive') {
+      _setActiveToolAsPassive.call(this);
+    }
+
     commandsManager.runCommand(button.commandName, options);
   }
 
