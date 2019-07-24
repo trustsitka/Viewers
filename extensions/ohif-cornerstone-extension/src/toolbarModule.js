@@ -36,24 +36,6 @@ const definitions = [
     commandOptions: { toolName: 'StackScroll' },
   },
   {
-    id: 'Pan',
-    label: 'Pan',
-    icon: 'arrows',
-    //
-    type: TOOLBAR_BUTTON_TYPES.SET_TOOL_ACTIVE,
-    commandName: 'setToolActive',
-    commandOptions: { toolName: 'Pan' },
-  },
-  {
-    id: 'Zoom',
-    label: 'Zoom',
-    icon: 'search-plus',
-    //
-    type: TOOLBAR_BUTTON_TYPES.SET_TOOL_ACTIVE,
-    commandName: 'setToolActive',
-    commandOptions: { toolName: 'Zoom' },
-  },
-  {
     id: 'PanZoomMouseWheel',
     label: 'Pan / Zoom',
     icon: 'arrows',
