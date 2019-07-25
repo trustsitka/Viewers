@@ -86,6 +86,12 @@ const actions = {
     }
     cornerstoneTools.setToolActive(toolName, { mouseButtonMask: 1 });
   },
+  setToolPassive: ({ toolName }) => {
+    if (!toolName) {
+      console.warn('No toolname provided to setToolPassive command');
+    }
+    cornerstoneTools.setToolPassive(toolName);
+  },
   updateViewportDisplaySet: ({ direction }) => {
     // TODO
     console.warn('updateDisplaySet: ', direction);
@@ -195,6 +201,11 @@ const definitions = {
     commandFn: actions.setToolActive,
     storeContexts: [],
     options: {},
+  },
+  setToolPassive: {
+    commandFn: actions.setToolPassive,
+    storeContexts: [],
+    options: {}
   },
   cancelActiveDraw: {
     commandFn: actions.cancelActiveDraw,

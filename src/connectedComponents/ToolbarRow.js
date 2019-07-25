@@ -193,6 +193,34 @@ function _getButtonComponents(toolbarButtons, activeButtons) {
 }
 
 /**
+ * Checks whether the passed button is currently active
+ *
+ * @param {*} button
+ */
+function _isButtonAlreadyActive(button) {
+  const { activeButtons } = this.state;
+  return activeButtons.includes(button.id);
+}
+
+/**
+ * Sets the tool associated to the active button as passive
+ */
+function _setActiveButtonToolAsPassive() {
+  const { activeButtons, toolbarButtons } = this.state;
+
+  // This must change if suddenly more than one
+  // button is stored in activeButtons.
+  const activeButtonId = activeButtons[0];
+  const activeTool = toolbarButtons.find(({ id }) => id === activeButtonId);
+
+  if (activeTool !== undefined) {
+    const { toolName } = activeTool.commandOptions;
+
+    commandsManager.runCommand('setToolPassive', { toolName });
+  }
+}
+
+/**
  * A handy way for us to handle different button types. IE. firing commands for
  * buttons, or initiation built in behavior.
  *
@@ -202,14 +230,25 @@ function _getButtonComponents(toolbarButtons, activeButtons) {
  */
 function _handleToolbarButtonClick(button, evt, props) {
   if (button.commandName) {
+    const { activeButtons } = this.state;
     const options = Object.assign({ evt }, button.commandOptions);
+
+    if (button.type === 'setToolActive' && activeButtons.length > 0) {
+      _setActiveButtonToolAsPassive.call(this);
+    }
+
     commandsManager.runCommand(button.commandName, options);
   }
 
   // TODO: Use Types ENUM
   // TODO: We can update this to be a `getter` on the extension to query
   //       For the active tools after we apply our updates?
-  if (button.type === 'setToolActive') {
+  if (
+    button.type === 'setToolActive' &&
+    !_isButtonAlreadyActive.call(this, button)
+  ) {
+    // If suddenly more than 1 button can be active then
+    // _setActiveButtonToolAsPassive must be updated
     this.setState({
       activeButtons: [button.id],
     });
