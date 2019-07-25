@@ -144,6 +144,8 @@ export default function setupTools(store) {
   const availableTools = [
     { name: 'Pan', mouseButtonMasks: [1, 4] },
     { name: 'Zoom', mouseButtonMasks: [1, 2] },
+    { name: 'ZoomMouseWheel' },
+    { name: 'PanZoom' },
     { name: 'Wwwc', mouseButtonMasks: [1] },
     { name: 'Magnify', mouseButtonMasks: [1] },
     { name: 'WwwcRegion', mouseButtonMasks: [1] },
