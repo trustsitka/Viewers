@@ -205,16 +205,20 @@ function _isButtonAlreadyActive(button) {
 /**
  * Sets the tool associated to the active button as passive
  */
-function _setActiveToolAsPassive() {
+function _setActiveButtonToolAsPassive() {
   const { activeButtons, toolbarButtons } = this.state;
 
-  const activeButtonId = activeButtons[0];
-  const activeTool = toolbarButtons.find(({ id }) => id === activeButtonId);
+  if (activeButtons.length > 0) {
+    // TODO: This must change if suddenly more than one
+    // button is stored in activeButtons.
+    const activeButtonId = activeButtons[0];
+    const activeTool = toolbarButtons.find(({ id }) => id === activeButtonId);
 
-  if (activeTool !== undefined) {
-    const { toolName } = activeTool.commandOptions;
+    if (activeTool !== undefined) {
+      const { toolName } = activeTool.commandOptions;
 
-    commandsManager.runCommand('setToolPassive', { toolName });
+      commandsManager.runCommand('setToolPassive', { toolName });
+    }
   }
 }
 
@@ -231,7 +235,7 @@ function _handleToolbarButtonClick(button, evt, props) {
     const options = Object.assign({ evt }, button.commandOptions);
 
     if (button.type === 'setToolActive') {
-      _setActiveToolAsPassive.call(this);
+      _setActiveButtonToolAsPassive.call(this);
     }
 
     commandsManager.runCommand(button.commandName, options);
