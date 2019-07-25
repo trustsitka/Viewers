@@ -208,17 +208,15 @@ function _isButtonAlreadyActive(button) {
 function _setActiveButtonToolAsPassive() {
   const { activeButtons, toolbarButtons } = this.state;
 
-  if (activeButtons.length > 0) {
-    // TODO: This must change if suddenly more than one
-    // button is stored in activeButtons.
-    const activeButtonId = activeButtons[0];
-    const activeTool = toolbarButtons.find(({ id }) => id === activeButtonId);
+  // This must change if suddenly more than one
+  // button is stored in activeButtons.
+  const activeButtonId = activeButtons[0];
+  const activeTool = toolbarButtons.find(({ id }) => id === activeButtonId);
 
-    if (activeTool !== undefined) {
-      const { toolName } = activeTool.commandOptions;
+  if (activeTool !== undefined) {
+    const { toolName } = activeTool.commandOptions;
 
-      commandsManager.runCommand('setToolPassive', { toolName });
-    }
+    commandsManager.runCommand('setToolPassive', { toolName });
   }
 }
 
@@ -232,9 +230,10 @@ function _setActiveButtonToolAsPassive() {
  */
 function _handleToolbarButtonClick(button, evt, props) {
   if (button.commandName) {
+    const { activeButtons } = this.state;
     const options = Object.assign({ evt }, button.commandOptions);
 
-    if (button.type === 'setToolActive') {
+    if (button.type === 'setToolActive' && activeButtons.length > 0) {
       _setActiveButtonToolAsPassive.call(this);
     }
 
@@ -248,6 +247,8 @@ function _handleToolbarButtonClick(button, evt, props) {
     button.type === 'setToolActive' &&
     !_isButtonAlreadyActive.call(this, button)
   ) {
+    // If suddenly more than 1 button can be active then
+    // _setActiveButtonToolAsPassive must be updated
     this.setState({
       activeButtons: [button.id],
     });
