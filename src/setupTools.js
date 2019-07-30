@@ -1,5 +1,4 @@
 import OHIF from 'ohif-core';
-import cornerstoneTools from 'cornerstone-tools';
 import updateTableWithNewMeasurementData from './lib/updateTableWithNewMeasurementData';
 
 function getToolLabellingFlowCallback(store) {
