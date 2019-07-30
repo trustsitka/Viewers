@@ -44,8 +44,33 @@ const definitions = [
     commandOptions: { toolName: 'PanZoom' },
   },
   {
-    id: 'DrawTools',
-    label: 'Draw',
+    id: 'BrushTools',
+    label: 'Brushes',
+    icon: 'palette',
+    buttons: [
+      {
+        id: 'Brush',
+        label: 'Brush',
+        icon: 'circle',
+        //
+        type: TOOLBAR_BUTTON_TYPES.SET_TOOL_ACTIVE,
+        commandName: 'setToolActive',
+        commandOptions: { toolName: 'Brush' },
+      },
+      {
+        id: 'BrushEraser',
+        label: 'Erase',
+        icon: 'circle-o',
+        //
+        type: TOOLBAR_BUTTON_TYPES.SET_TOOL_ACTIVE,
+        commandName: 'setToolActive',
+        commandOptions: { toolName: 'BrushEraser' },
+      },
+    ],
+  },
+  {
+    id: 'AnnotateTools',
+    label: 'Annotate',
     icon: 'measure-temp',
     buttons: [
       {
@@ -101,14 +126,6 @@ const definitions = [
         type: TOOLBAR_BUTTON_TYPES.SET_TOOL_ACTIVE,
         commandName: 'setToolActive',
         commandOptions: { toolName: 'Eraser' },
-      },
-      {
-        id: 'Clear',
-        label: 'Delete All',
-        icon: 'trash',
-        //
-        type: TOOLBAR_BUTTON_TYPES.COMMAND,
-        commandName: 'clearAnnotations',
       },
     ],
   },

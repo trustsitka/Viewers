@@ -1,4 +1,5 @@
 import OHIF from 'ohif-core';
+import cornerstoneTools from 'cornerstone-tools';
 import updateTableWithNewMeasurementData from './lib/updateTableWithNewMeasurementData';
 
 function getToolLabellingFlowCallback(store) {
@@ -141,6 +142,14 @@ function getResetLabellingAndContextMenu(store) {
 
 export default function setupTools(store) {
   const toolLabellingFlowCallback = getToolLabellingFlowCallback(store);
+
+  cornerstoneTools.addTool(cornerstoneTools.BrushTool, {
+    name: 'BrushEraser',
+    configuration: {
+      alwaysEraseOnClick: true,
+    },
+  });
+
   const availableTools = [
     { name: 'Pan', mouseButtonMasks: [1, 4] },
     { name: 'Zoom', mouseButtonMasks: [1, 2] },
@@ -178,6 +187,7 @@ export default function setupTools(store) {
     },
     { name: 'StackScroll', mouseButtonMasks: [1] },
     { name: 'Brush', mouseButtonMasks: [1] },
+    { name: 'BrushEraser' },
     {
       name: 'FreehandMouse',
       props: {
