@@ -45,7 +45,7 @@ const definitions = [
   },
   {
     id: 'BrushTools',
-    label: 'Brushes',
+    label: 'Draw',
     icon: 'palette',
     buttons: [
       {
@@ -59,7 +59,7 @@ const definitions = [
       },
       {
         id: 'BrushEraser',
-        label: 'Erase',
+        label: 'Brush Eraser',
         icon: 'circle-o',
         //
         type: TOOLBAR_BUTTON_TYPES.SET_TOOL_ACTIVE,

@@ -143,13 +143,6 @@ function getResetLabellingAndContextMenu(store) {
 export default function setupTools(store) {
   const toolLabellingFlowCallback = getToolLabellingFlowCallback(store);
 
-  cornerstoneTools.addTool(cornerstoneTools.BrushTool, {
-    name: 'BrushEraser',
-    configuration: {
-      alwaysEraseOnClick: true,
-    },
-  });
-
   const availableTools = [
     { name: 'Pan', mouseButtonMasks: [1, 4] },
     { name: 'Zoom', mouseButtonMasks: [1, 2] },
