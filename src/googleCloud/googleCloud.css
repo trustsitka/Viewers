@@ -94,13 +94,6 @@
   background-color: #000000;
 }
 
-.gcp-invisible-input {
-  position: absolute;
-  display: none;
-  z-index: -1000;
-  max-width: 0 !important;
-  max-height: 0 !important;
-}
 .gcp-hidden {
   display: none;
 }
@@ -146,9 +139,4 @@
   font-weight: 28px;
   text-align: left;
   margin: 20px auto;
-}
-
-.gcp-dicom-uploader .button {
-  float: left;
-  margin: 5px;
 }

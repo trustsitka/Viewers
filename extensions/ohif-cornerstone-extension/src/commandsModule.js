@@ -147,6 +147,22 @@ const actions = {
 
      scroll(enabledElement, -1);
   },
+  nextImage: ({ viewports }) => {
+    const enabledElement = _getActiveViewportEnabledElement(
+      viewports.viewportSpecificData,
+      viewports.activeViewportIndex
+    );
+
+    scroll(enabledElement, 1);
+  },
+  previousImage: ({ viewports }) => {
+    const enabledElement = _getActiveViewportEnabledElement(
+      viewports.viewportSpecificData,
+      viewports.activeViewportIndex
+    );
+
+    scroll(enabledElement, -1);
+  }
 };
 
 const definitions = {
